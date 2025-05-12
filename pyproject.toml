@@ -1,0 +1,12 @@
+[project]
+name = "ply"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=2.2.4",
+    "open3d>=0.19.0",
+    "opencv-python>=4.11.0.86",
+    "scipy>=1.15.2",
+]
