@@ -72,10 +72,8 @@ def extract_frames(video_path, output_dir=None, prefix="frame"):
 # 使用例
 if __name__ == "__main__":
     # 動画ファイルのパスを指定して実行
-    video_path = (
-        "./raw_mov/iphone_60fps.MOV"  # 処理したい動画ファイルのパスに変更してください
-    )
+    video_path = "./raw_mov/field.MOV"  # 処理したい動画ファイルのパスに変更してください
     extracted_dir = extract_frames(
         video_path,
-        output_dir="./output_frames/iphone_60fps",  # 出力ディレクトリを指定（Noneの場合は自動生成）
+        output_dir="./output_frames/field",  # 出力ディレクトリを指定（Noneの場合は自動生成）
     )

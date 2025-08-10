@@ -124,7 +124,9 @@ def calculate_point_density(points, radius=0.1):
     return np.array(densities)
 
 
-def extract_dense_regions(points, eps=0.1, min_samples=10, min_cluster_size=100):
+def extract_dense_regions(
+    points, eps=0.1, min_samples=10, min_cluster_size=100, extract_densest_only=False
+):
     """密度の高い領域を抽出する"""
     # DBSCANクラスタリングを実行
     clustering = DBSCAN(eps=eps, min_samples=min_samples).fit(points)
@@ -141,11 +143,28 @@ def extract_dense_regions(points, eps=0.1, min_samples=10, min_cluster_size=100)
         if label != -1 and cluster_sizes[label] >= min_cluster_size
     ]
 
+    if extract_densest_only and valid_clusters:
+        # 各クラスタの密度を計算
+        cluster_densities = {}
+        for cluster_label in valid_clusters:
+            cluster_mask = labels == cluster_label
+            cluster_points = points[cluster_mask]
+
+            # クラスタ内の平均密度を計算
+            densities = calculate_point_density(cluster_points, radius=eps)
+            avg_density = np.mean(densities)
+            cluster_densities[cluster_label] = avg_density
+
+        # 最も密度の高いクラスタを選択
+        densest_cluster = max(cluster_densities, key=cluster_densities.get)
+        valid_clusters = [densest_cluster]
+
     # 選択されたクラスタの点を抽出
     mask = np.isin(labels, valid_clusters)
     dense_points = points[mask]
+    dense_labels = labels[mask]
 
-    return dense_points, labels
+    return dense_points, dense_labels
 
 
 def visualize_point_cloud(points, window_name="Point Cloud"):
@@ -268,6 +287,11 @@ def main():
     parser.add_argument(
         "--show-density", action="store_true", help="点群の密度を可視化"
     )
+    parser.add_argument(
+        "--extract-densest-only",
+        action="store_true",
+        help="最も密度の高いクラスタのみを抽出",
+    )
 
     # 可視化オプション
     parser.add_argument(
@@ -303,45 +327,53 @@ def main():
                 eps=args.density_eps,
                 min_samples=args.density_min_samples,
                 min_cluster_size=args.density_min_cluster_size,
+                extract_densest_only=args.extract_densest_only,
             )
             logger.info(f"抽出後の点の数: {len(points)}")
 
             # 高密度領域抽出後の可視化を追加
             if args.visualize:
-                logger.info("抽出された高密度領域を表示します")
-                visualize_point_cloud(points, "Dense Regions")
+                if args.extract_densest_only:
+                    logger.info("最も密度の高いクラスタを表示します")
+                    visualize_point_cloud(points, "Densest Cluster")
+                else:
+                    logger.info("抽出された高密度領域を表示します")
+                    visualize_point_cloud(points, "Dense Regions")
 
-                # クラスタごとに色分けして表示
-                if len(points) > 0:
+                # クラスタごとに色分けして表示（複数クラスタの場合のみ）
+                if len(points) > 0 and not args.extract_densest_only:
                     pcd = o3d.geometry.PointCloud()
                     pcd.points = o3d.utility.Vector3dVector(points)
 
-                    # クラスタごとに異なる色を割り当て
-                    unique_valid_labels = np.unique(labels[labels != -1])
-                    colors = plt.cm.rainbow(
-                        np.linspace(0, 1, len(unique_valid_labels))
-                    )[:, :3]
-                    point_colors = np.zeros((len(points), 3))
+                    # 抽出された点群のラベルを使用
+                    unique_valid_labels = np.unique(labels)
+                    if len(unique_valid_labels) > 1:
+                        colors = plt.cm.rainbow(
+                            np.linspace(0, 1, len(unique_valid_labels))
+                        )[:, :3]
+                        point_colors = np.zeros((len(points), 3))
 
-                    for i, label in enumerate(unique_valid_labels):
-                        mask = labels == label
-                        point_colors[mask] = colors[i]
+                        for i, label in enumerate(unique_valid_labels):
+                            cluster_mask = labels == label
+                            point_colors[cluster_mask] = colors[i]
 
-                    pcd.colors = o3d.utility.Vector3dVector(point_colors)
+                        pcd.colors = o3d.utility.Vector3dVector(point_colors)
 
-                    # ビジュアライザーの作成と設定
-                    vis = o3d.visualization.Visualizer()
-                    vis.create_window(window_name="Dense Regions (Colored by Cluster)")
-                    vis.add_geometry(pcd)
+                        # ビジュアライザーの作成と設定
+                        vis = o3d.visualization.Visualizer()
+                        vis.create_window(
+                            window_name="Dense Regions (Colored by Cluster)"
+                        )
+                        vis.add_geometry(pcd)
 
-                    # レンダリングオプションの設定
-                    render_option = vis.get_render_option()
-                    render_option.point_size = 2.0
-                    render_option.background_color = np.array([1, 1, 1])  # 白背景
+                        # レンダリングオプションの設定
+                        render_option = vis.get_render_option()
+                        render_option.point_size = 2.0
+                        render_option.background_color = np.array([1, 1, 1])
 
-                    # ビューの実行
-                    vis.run()
-                    vis.destroy_window()
+                        # ビューの実行
+                        vis.run()
+                        vis.destroy_window()
 
         # ノイズ除去
         if args.noise_removal != "none":
@@ -422,20 +454,29 @@ if __name__ == "__main__":
     python preprocess.py ./chair_30fps/untitled.ply output.ply
     
     2. 密度の可視化と高密度領域の抽出:
-    uv run preprocess.py processed_ply/iphone_60fps/output_down.ply processed_ply/iphone_60fps/output2.ply \
+    uv run preprocess.py processed_ply/field/output.ply processed_ply/field/output_test.ply \
         --show-density \
         --extract-dense \
-        --density-eps 0.1 \
+        --density-eps 0.2 \
         --density-min-samples 30 \
         --density-min-cluster-size 2000
 
+    2b. 最も密度の高いクラスタのみを抽出:
+    uv run preprocess.py processed_ply/field/output.ply processed_ply/field/output_test.ply \
+        --extract-dense \
+        --extract-densest-only \
+        --density-eps 0.1 \
+        --density-min-samples 30 \
+        --density-min-cluster-size 500 \
+        --visualize
+
     3. ノイズ除去とダウンサンプリングを組み合わせる:
-    python preprocess.py raw_ply/room_4k5/room_4k5.ply result/room_4k5/output_down.ply \
+    uv run preprocess.py raw_ply/field/field.ply processed_ply/field/output_down.ply \
         --noise-removal statistical \
-        --nb-neighbors 200 \
-        --std-ratio 0.5 \
+        --nb-neighbors 50 \
+        --std-ratio 1.0 \
         --downsample voxel \
-        --voxel-size 0.05 \
+        --voxel-size 0.01 \
         --visualize
     
     4. 密度ベースの処理と他の処理を組み合わせる:
@@ -456,14 +497,21 @@ if __name__ == "__main__":
 
     注意：
     メモリ不足回避のため、ノイズ除去、ダウンサンプリングの後に密度ベースの処理を実行することをお勧めします。
+
+    ノイズ除去パラメータ
+
+    nb-neighbors: 20-50（複雑な形状ほど大きく）
+    std-ratio: 1.0-2.0（小さいほど厳しい除去）
+    contamination (LOF): 0.05-0.2（ノイズの割合を推定）
+
+    密度ベース抽出
+
+    density-eps: 0.03-0.1（点群の密度に応じて調整）
+    density-min-samples: 10-30
+    density-min-cluster-size: 500-2000（保持したい部位のサイズ）
+
+    ダウンサンプリング
+
+    voxel-size: 0.01-0.05（小さいほど詳細保持、大きいほど軽量化）
     """
     main()
-
-    """
-    uv run ransac.py result/room_4k5/output.ply\
-        --epsilon 0.029\
-        --alpha 25\
-        --min-points 300\
-        --max-iterations 100\
-        --visualize
-    """

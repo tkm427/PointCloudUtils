@@ -1,24 +1,16 @@
 cmake_minimum_required(VERSION 3.5)
-project(sphere_detection)
+project(pcl_processing)
 
-# C++11を有効化
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# PCLを見つける
 find_package(PCL 1.8 REQUIRED)
 
-# インクルードディレクトリを追加
 include_directories(${PCL_INCLUDE_DIRS})
-
-# リンクディレクトリを追加
 link_directories(${PCL_LIBRARY_DIRS})
-
-# 定義を追加
 add_definitions(${PCL_DEFINITIONS})
 
-# 実行ファイルの作成
-add_executable(sphere_detection sphere_detection.cpp)
+# Region Growing実行ファイル（既存）
+add_executable(region_growing region_growing.cpp)
+target_link_libraries(region_growing ${PCL_LIBRARIES})
 
-# PCLライブラリとリンク
-target_link_libraries(sphere_detection ${PCL_LIBRARIES})
+# MLS Smoothing実行ファイル（新規）
+add_executable(mls mls.cpp)
+target_link_libraries(mls ${PCL_LIBRARIES})

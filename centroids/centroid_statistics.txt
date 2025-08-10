@@ -1,0 +1,56 @@
+Centroid Statistics
+==================
+
+Total files found: 39
+Files processed: 38
+Valid centroids: 38
+Failed files: 0
+
+Overall centroid statistics:
+Mean X: 0.413839
+Mean Y: 0.177800
+Mean Z: 0.927510
+Std X: 0.550351
+Std Y: 0.346400
+Std Z: 0.346587
+
+Individual file information:
+--------------------------------------------------------------------------------
+Ransac_000000.txt    | Points:   3605 | Centroid: (   0.011,    0.791,    1.104)
+Ransac_000001.txt    | Points:   3184 | Centroid: (   0.755,    0.538,    0.499)
+Ransac_000002.txt    | Points:   2952 | Centroid: (   1.434,    0.282,    0.852)
+Ransac_000003.txt    | Points:   3071 | Centroid: (  -0.541,    0.440,    0.497)
+Ransac_000004.txt    | Points:   3079 | Centroid: (   0.046,   -0.296,    0.714)
+Ransac_000005.txt    | Points:   2661 | Centroid: (   0.694,   -0.013,    0.541)
+Ransac_000006.txt    | Points:   2539 | Centroid: (   0.002,    0.392,    0.446)
+Ransac_000007.txt    | Points:   2662 | Centroid: (   1.439,   -0.122,    1.169)
+Ransac_000008.txt    | Points:   2550 | Centroid: (   0.384,    0.571,    0.895)
+Ransac_000009.txt    | Points:   2744 | Centroid: (   0.136,    0.084,    1.338)
+Ransac_000010.txt    | Points:   2949 | Centroid: (   0.673,    0.693,    0.925)
+Ransac_000011.txt    | Points:   2684 | Centroid: (   0.499,   -0.339,    1.177)
+Ransac_000012.txt    | Points:   2681 | Centroid: (   1.126,    0.208,    0.616)
+Ransac_000013.txt    | Points:   2324 | Centroid: (   0.728,    0.514,    1.495)
+Ransac_000014.txt    | Points:   2565 | Centroid: (   0.909,   -0.303,    0.982)
+Ransac_000015.txt    | Points:   2289 | Centroid: (   1.432,    0.284,    1.163)
+Ransac_000016.txt    | Points:   2303 | Centroid: (   0.996,    0.224,    1.408)
+Ransac_000017.txt    | Points:   2294 | Centroid: (   0.352,   -0.329,    0.597)
+Ransac_000018.txt    | Points:   2199 | Centroid: (   1.190,   -0.132,    1.350)
+Ransac_000019.txt    | Points:   1921 | Centroid: (  -0.328,   -0.331,    1.123)
+Ransac_000020.txt    | Points:   2421 | Centroid: (  -0.422,   -0.452,    0.637)
+Ransac_000021.txt    | Points:   2267 | Centroid: (  -0.408,    0.315,    1.222)
+Ransac_000022.txt    | Points:   2203 | Centroid: (   0.834,    0.668,    1.189)
+Ransac_000023.txt    | Points:   2141 | Centroid: (  -0.279,    0.584,    0.885)
+Ransac_000024.txt    | Points:   2799 | Centroid: (  -0.220,    0.128,    0.414)
+Ransac_000025.txt    | Points:   2040 | Centroid: (   0.531,    0.129,    1.382)
+Ransac_000026.txt    | Points:   2163 | Centroid: (   0.427,    0.605,    1.197)
+Ransac_000027.txt    | Points:   2393 | Centroid: (   0.346,    0.514,    0.596)
+Ransac_000028.txt    | Points:   1842 | Centroid: (   0.471,    0.189,    0.492)
+Ransac_000029.txt    | Points:   2285 | Centroid: (   0.537,   -0.263,    0.846)
+Ransac_000030.txt    | Points:   2052 | Centroid: (  -0.160,   -0.206,    1.313)
+Ransac_000031.txt    | Points:   2158 | Centroid: (   0.996,    0.455,    0.851)
+Ransac_000032.txt    | Points:   2455 | Centroid: (  -0.212,    0.541,    1.180)
+Ransac_000033.txt    | Points:   2414 | Centroid: (   0.228,   -0.178,    0.334)
+Ransac_000034.txt    | Points:   2082 | Centroid: (   0.848,    0.235,    0.596)
+Ransac_000035.txt    | Points:   2111 | Centroid: (  -0.304,    0.060,    1.415)
+Ransac_000036.txt    | Points:   1889 | Centroid: (   0.353,   -0.079,    1.348)
+Ransac_000037.txt    | Points:   1389 | Centroid: (   0.223,    0.354,    0.456)
