@@ -19,5 +19,7 @@ colmap-3.10/
 *.DS_Store
 processed_ply/
 CloudCompare/
-ransac/
+ransac/ 
 result/
+colmap/
+data/
