@@ -454,15 +454,16 @@ if __name__ == "__main__":
     python preprocess.py ./chair_30fps/untitled.ply output.ply
     
     2. 密度の可視化と高密度領域の抽出:
-    uv run preprocess.py processed_ply/field/output.ply processed_ply/field/output_test.ply \
+    uv run preprocess.py data/processed_ply/before5/output_down.ply data/processed_ply/before5/output.ply \
         --show-density \
         --extract-dense \
-        --density-eps 0.2 \
+        --density-eps 0.08 \
         --density-min-samples 30 \
-        --density-min-cluster-size 2000
+        --density-min-cluster-size 5000
+        
 
     2b. 最も密度の高いクラスタのみを抽出:
-    uv run preprocess.py processed_ply/field/output.ply processed_ply/field/output_test.ply \
+    uv run preprocess.py data/processed_ply/before3/output_down.ply data/processed_ply/before3/output.ply \
         --extract-dense \
         --extract-densest-only \
         --density-eps 0.1 \
@@ -471,14 +472,12 @@ if __name__ == "__main__":
         --visualize
 
     3. ノイズ除去とダウンサンプリングを組み合わせる:
-    uv run preprocess.py raw_ply/field/field.ply processed_ply/field/output_down.ply \
+    uv run preprocess.py data/raw_ply/before5/before5.ply data/processed_ply/before5/output_down.ply \
         --noise-removal statistical \
         --nb-neighbors 50 \
         --std-ratio 1.0 \
         --downsample voxel \
-        --voxel-size 0.01 \
-        --visualize
-    
+        --voxel-size 0.01
     4. 密度ベースの処理と他の処理を組み合わせる:
     python preprocess.py ./chair_30fps/untitled.ply output.ply \
         --extract-dense \

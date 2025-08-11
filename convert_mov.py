@@ -72,8 +72,10 @@ def extract_frames(video_path, output_dir=None, prefix="frame"):
 # 使用例
 if __name__ == "__main__":
     # 動画ファイルのパスを指定して実行
-    video_path = "./raw_mov/field.MOV"  # 処理したい動画ファイルのパスに変更してください
+    video_path = (
+        "./data/raw_mov/3_before.MP4"  # 処理したい動画ファイルのパスに変更してください
+    )
     extracted_dir = extract_frames(
         video_path,
-        output_dir="./output_frames/field",  # 出力ディレクトリを指定（Noneの場合は自動生成）
+        output_dir="./data/output_frames/before3",  # 出力ディレクトリを指定（Noneの場合は自動生成）
     )

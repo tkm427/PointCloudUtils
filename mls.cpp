@@ -7,7 +7,7 @@
 #include <pcl/search/kdtree.h>
 #include <cmath>
 
-//./mls ../processed_ply/iphone_60fps/output-Cloud.ply  ../processed_ply/iphone_60fps/output_smoothed.ply -radius 0.03 -polynomial 2
+//./mls ../data/processed_ply/before3/output.ply  ../data/processed_ply/before3/output_smoothed.ply  -radius 0.03 -polynomial 2
 int main(int argc, char **argv)
 {
     // コマンドライン引数の確認
